@@ -7,10 +7,13 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const MONGODB_DB = process.env.MONGODB_DB || 'simple-api';
 
 const server = async () => {
+
   const mongoClient = await MongoClient.connect(MONGODB_URI, {
     useNewUrlParser: true
   });
+  
   const db = mongoClient.db(MONGODB_DB);
+
   const app = express();
   app.use(bodyParser.json());
 

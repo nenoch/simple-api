@@ -1,6 +1,4 @@
-
-module.exports = class TodosService {
-
+class TodosService {
     constructor(db) {
         this.db = db
     }
@@ -22,7 +20,7 @@ module.exports = class TodosService {
             throw 'title must be a string'
         }
         todoData.title = todoData.title.trim()
-        const result = await this.db.collection('todos').insert({
+        const result = await this.db.collection('todos').insertOne({
             title: todoData.title,
             completed: false,
             createdAt: new Date(),
@@ -31,4 +29,6 @@ module.exports = class TodosService {
         const todo = result.ops[0]
         return todo
     }
-}
+};
+
+module.exports = TodosService;
