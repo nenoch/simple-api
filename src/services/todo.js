@@ -1,34 +1,25 @@
-class TodosService {
-    constructor(db) {
-        this.db = db
-    }
+const Todo = require('../models/todo.js');
 
-    async getAllTodos() {
-        const todos = await this.db
-            .collection('todos')
-            .find({})
-            .sort({ _id: 1 })
-            .toArray()
-        return todos
-    }
+async function getTodos() {
+  const todos = await Todo.find();
+  return todos;
+}
 
-    async createTodo(todoData) {
-        if (!todoData.title) {
-            throw 'title is required'
-        }
-        if (typeof todoData.title !== 'string') {
-            throw 'title must be a string'
-        }
-        todoData.title = todoData.title.trim()
-        const result = await this.db.collection('todos').insertOne({
-            title: todoData.title,
-            completed: false,
-            createdAt: new Date(),
-            updatedAt: new Date()
-        })
-        const todo = result.ops[0]
-        return todo
-    }
-};
+async function postTodo(todoData) {
+  if (Object.keys(todoData).length === 0) {
+    throw 'the body of the request can not be empty';
+  }
+  if (!todoData.title) {
+    throw 'title is required';
+  }
+  const todo = new Todo({
+    title: todoData.title || 'Untitled Note',
+    completed: todoData.completed || false
+  });
 
-module.exports = TodosService;
+  todo.save();
+  return todo;
+}
+
+module.exports.getTodos = getTodos;
+module.exports.postTodo = postTodo;

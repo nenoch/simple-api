@@ -1,50 +1,38 @@
 const express = require('express');
-const { MongoClient } = require('mongodb');
 const bodyParser = require('body-parser');
+const dbConfig = require('./config');
+const mongoose = require('mongoose');
+const todosController = require('./controllers/todo.js');
 
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
-const MONGODB_DB = process.env.MONGODB_DB || 'simple-api';
 
-const server = async () => {
+const app = express();
 
-  const mongoClient = await MongoClient.connect(MONGODB_URI, {
+app.use(bodyParser.json());
+
+mongoose.Promise = global.Promise;
+
+mongoose.connect(dbConfig.url, {
     useNewUrlParser: true
-  });
-  
-  const db = mongoClient.db(MONGODB_DB);
+}).then(() => {
+    console.log("Successfully connected to the database");    
+}).catch(err => {
+    console.log('Could not connect to the database. Exiting now...', err);
+    process.exit();
+});
 
-  const app = express();
-  app.use(bodyParser.json());
+app.get('/', (req, res, next) => {
+  res.status(200).json({ name: 'simple-api' });
+});
 
-  app.use(
-    (attachDb = (req, res, next) => {
-      req.db = db;
-      next();
-    })
-  );
+app.post('/todos', todosController.create);
 
-  app.get('/', (req, res, next) => {
-    res.status(200).json({ name: 'simple-api' });
-  });
-  
-  app.use(require('./routes/todo'));
+app.get('/todos', todosController.findAll);
 
-  // Error handling
-  app.use((err, req, res, next) => {
-    if (err) {
-      return res.status(400).json({ error: err });
-    }
-    next(err);
-  });
-
-  app.listen(PORT, err => {
-    if (err) {
-      throw err;
-    }
-    // eslint-disable-next-line no-console
-    console.log(`api-server listening on port ${PORT}`);
-  });
-};
-
-server();
+app.listen(PORT, err => {
+  if (err) {
+    throw err;
+  }
+  // eslint-disable-next-line no-console
+  console.log(`api-server listening on port ${PORT}`);
+});
