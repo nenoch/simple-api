@@ -1,0 +1,20 @@
+{
+  "name": "simple-api",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/server"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "prettier": {
+    "singleQuote": true
+  }
+}
