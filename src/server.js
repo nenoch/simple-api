@@ -1,9 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const dbConfig = require('./config');
 const mongoose = require('mongoose');
 const todosController = require('./controllers/todo.js');
 
+const env = process.env.NODE_ENV || 'development';
+const dbConfig = require(`./config/${env}`);
 const PORT = process.env.PORT || 3000;
 
 const app = express();
@@ -13,7 +14,8 @@ app.use(bodyParser.json());
 mongoose.Promise = global.Promise;
 
 mongoose.connect(dbConfig.url, {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 }).then(() => {
     console.log("Successfully connected to the database");    
 }).catch(err => {
@@ -36,3 +38,5 @@ app.listen(PORT, err => {
   // eslint-disable-next-line no-console
   console.log(`api-server listening on port ${PORT}`);
 });
+
+module.exports = app;
