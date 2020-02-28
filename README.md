@@ -2,9 +2,13 @@
 
 Yeah. I am just a simple API.
 
-Make sure you have mongodb installed and running in the background.
+Make sure you have mongodb installed locally and running in the background.
 
 **Run locally:**
 ```
-yarn dev
+yarn start
+```
+**Run integration tests:**
+```
+yarn test
 ```
