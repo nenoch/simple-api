@@ -1,15 +1,31 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const todosController = require('./controllers/todo.js');
 
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = require(`./config/${env}`);
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 const app = express();
 
 app.use(bodyParser.json());
+
+const corsOpts = {
+  origin: '*',
+
+  methods: [
+    'GET',
+    'POST',
+  ],
+
+  allowedHeaders: [
+    'Content-Type',
+  ],
+};
+
+app.use(cors(corsOpts));
 
 mongoose.Promise = global.Promise;
 

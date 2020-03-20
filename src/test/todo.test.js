@@ -3,7 +3,6 @@ const expect = chai.expect;
 const supertest = require('supertest');
 const app = require('../server.js');
 const request = supertest(app);
-const mongoose = require('mongoose');
 const dropCollections = require('./utils');
 
 describe('Todo integration testing', () => {
