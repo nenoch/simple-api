@@ -1,17 +1,15 @@
+const mongoose = require('mongoose');
 const Day = require('../models/day.js');
 
+
 async function getDays() {
-  const days = await Day.find();
-  return days;
+  return await Day.find().lean();
 }
 
 async function postDay(dayData) {
-  if (Object.keys(dayData).length === 0) {
-    throw 'the body of the request can not be empty';
-  }
-  if (!dayData.content) {
-    throw 'the content can not be empty';
-  }
+  if (Object.keys(dayData).length === 0) throw 'the body of the request can not be empty';
+  if (!dayData.content) throw 'the content can not be empty';
+
   const day = new Day({
     title: dayData.title || 'Untitled Day',
     content: dayData.content,
@@ -19,8 +17,14 @@ async function postDay(dayData) {
   });
 
   day.save();
-  return day;
+  return day.toObject();
+}
+
+async function removeDayById(id) {
+    if (!mongoose.Types.ObjectId.isValid(id)) throw 'Invalid ID';
+    return await Day.findOneAndRemove({ _id: id }).lean();
 }
 
 module.exports.getDays = getDays;
 module.exports.postDay = postDay;
+module.exports.removeDayById = removeDayById;
