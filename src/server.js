@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const todosController = require('./controllers/todo.js');
+const daysController = require('./controllers/day.js');
 
 const env = process.env.NODE_ENV || 'development';
 const dbConfig = require(`./config/${env}`);
@@ -44,8 +45,10 @@ app.get('/', (req, res, next) => {
 });
 
 app.post('/todos', todosController.create);
-
 app.get('/todos', todosController.findAll);
+
+app.post('/days', daysController.create);
+app.get('/days', daysController.findAll);
 
 app.listen(PORT, err => {
   if (err) {
