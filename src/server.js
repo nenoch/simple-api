@@ -19,7 +19,8 @@ const corsOpts = {
   methods: [
     'GET',
     'POST',
-    'DELETE'
+    'DELETE',
+    'PATCH'
   ],
 
   allowedHeaders: [
@@ -51,6 +52,7 @@ app.get('/todos', todosController.findAll);
 app.post('/days', daysController.create);
 app.get('/days', daysController.findAll);
 app.delete('/days/:id', daysController.deleteById);
+app.patch('/days/:id', daysController.patch);
 
 app.listen(PORT, err => {
   if (err) {

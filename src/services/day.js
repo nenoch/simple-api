@@ -25,6 +25,12 @@ async function removeDayById(id) {
     return await Day.findOneAndRemove({ _id: id }).lean();
 }
 
+async function updateDay(id, patch) {
+    if (!mongoose.Types.ObjectId.isValid(id)) throw 'Invalid ID';
+    return await Day.findOneAndUpdate({ _id: id }, patch, { new: true, useFindAndModify: false }).lean();
+}
+
 module.exports.getDays = getDays;
 module.exports.postDay = postDay;
 module.exports.removeDayById = removeDayById;
+module.exports.updateDay = updateDay;

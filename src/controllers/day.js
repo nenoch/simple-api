@@ -33,7 +33,18 @@ async function deleteById(req, res) {
   }
 }
 
+async function patch(req, res) {
+  try {
+    const day = await dayService.updateDay(req.params.id, req.body);
+    return res.status(200).json(day);
+  } catch (err) {
+    res.status(500).send({
+      message: err.message || 'Some error occurred while deleting a day.'
+    });
+  }
+}
+
 module.exports.findAll = findAll;
 module.exports.create = create;
 module.exports.deleteById = deleteById;
-
+module.exports.patch = patch;
