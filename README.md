@@ -6,7 +6,7 @@ Make sure you have mongodb installed locally and running in the background.
 
 **Run locally:**
 ```
-yarn start
+yarn start:dev
 ```
 **Run integration tests:**
 ```
