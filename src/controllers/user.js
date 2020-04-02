@@ -14,4 +14,19 @@ async function create(req, res) {
   }
 }
 
+async function login(req, res) {
+    try {
+      const response = await userService.loginUser(req.body);
+      console.log("response", response);
+      return res.status(response.status).json({
+          message: response.message,
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: err || 'Some error occurred while creating a user.'
+      });
+    }
+  }
+
 module.exports.create = create;
+module.exports.login = login;

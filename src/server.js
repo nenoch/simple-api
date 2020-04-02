@@ -56,6 +56,7 @@ app.delete('/days/:id', daysController.deleteById);
 app.patch('/days/:id', daysController.patch);
 
 app.post('/users', usersController.create);
+app.post('/login', usersController.login);
 
 app.listen(PORT, err => {
   if (err) {

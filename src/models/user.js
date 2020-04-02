@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
     type: 'String',
     required: true,
     trim: true
-    },
+  },
   password: {
     type: 'String',
     required: true,
@@ -20,7 +20,7 @@ userSchema.pre('save', function(next) {
   if (!user.isModified || !user.isNew) {
     next();
   } else {
-    bcrypt.hash(user.password, saltingRounds = 10, function(err, hash) {
+    bcrypt.hash(user.password, (saltingRounds = 10), function(err, hash) {
       if (err) {
         console.log('Error hashing password for user', user.name);
         next(err);
