@@ -14,7 +14,7 @@ async function addUser(userData) {
   const user = new User({ username, password });
   user.save();
 
-  let token = jwt.sign({ id: user._id }, config.secret, {
+  const token = jwt.sign({ id: user._id }, config.secret, {
     expiresIn: 86400 // 24 hours
   });
 
@@ -25,12 +25,17 @@ async function loginUser(userData) {
   const { username, password } = userData;
 
   const user = await User.findOne({ username });
-  if (!user) return { status: 404, message: `User doesn't exist` };
+  if (!user) return { status: 404, message: `User doesn't exist`, auth: false, token: undefined };
   
   const isMatch = await bcrypt.compare(password, user.password);
-  return !isMatch
-    ? { status: 401, message: `Password does not match` }
-    : { status: 200, message: `Login successful for ${user.username}` };
+  if (!isMatch) {
+    return { status: 401, message: `Password does not match`, auth: false, token: undefined };
+  } else {
+    const token = jwt.sign({ id: user._id }, config.secret, {
+      expiresIn: 86400 // 24 hours
+    });
+    return { status: 200, message: `Login successful for ${user.username}`, auth: true, token: token };
+  }
 }
 
 module.exports.addUser = addUser;

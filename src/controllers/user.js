@@ -19,7 +19,9 @@ async function login(req, res) {
     try {
       const response = await userService.loginUser(req.body);
       return res.status(response.status).json({
-          message: response.message,
+        message: response.message,
+        auth: response.auth,
+        token: response.token
       });
     } catch (err) {
       res.status(500).send({
