@@ -1,5 +1,8 @@
 const User = require('../models/user.js');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const env = process.env.NODE_ENV || 'development';
+const config = require(`../config/${env}`);
 
 async function addUser(userData) {
   if (Object.keys(userData).length === 0)
@@ -9,9 +12,13 @@ async function addUser(userData) {
 
   const { username, password } = userData;
   const user = new User({ username, password });
-
   user.save();
-  return user.toObject();
+
+  let token = jwt.sign({ id: user._id }, config.secret, {
+    expiresIn: 86400 // 24 hours
+  });
+
+  return { status: 201, auth: true, message: `Signup successful for ${user.username}`, token: token }
 }
 
 async function loginUser(userData) {
