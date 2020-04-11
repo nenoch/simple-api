@@ -14,9 +14,7 @@ async function addUser(userData) {
   const user = new User({ username, password });
   user.save();
 
-  const token = jwt.sign({ id: user._id }, config.secret, {
-    expiresIn: 86400 // 24 hours
-  });
+  const token = await generateToken(user);
 
   return { status: 201, auth: true, message: `Signup successful for ${user.username}`, token: token }
 }
@@ -31,11 +29,15 @@ async function loginUser(userData) {
   if (!isMatch) {
     return { status: 401, message: `Password does not match`, auth: false, token: undefined };
   } else {
-    const token = jwt.sign({ id: user._id }, config.secret, {
-      expiresIn: 86400 // 24 hours
-    });
+    const token = await generateToken(user);
     return { status: 200, message: `Login successful for ${user.username}`, auth: true, token: token };
   }
+}
+
+async function generateToken(user) {
+  return jwt.sign({ id: user._id, name: user.username }, config.secret, {
+    expiresIn: 86400 // 24 hours
+  });
 }
 
 module.exports.addUser = addUser;
