@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const TodoSchema = new mongoose.Schema(
+const todoSchema = new mongoose.Schema(
   {
     title: String,
     completed: Boolean
@@ -10,4 +10,4 @@ const TodoSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Todo', TodoSchema);
+module.exports = mongoose.model('Todo', todoSchema);

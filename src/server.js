@@ -4,9 +4,10 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const todosController = require('./controllers/todo.js');
 const daysController = require('./controllers/day.js');
+const usersController = require('./controllers/user.js');
 
 const env = process.env.NODE_ENV || 'development';
-const dbConfig = require(`./config/${env}`);
+const config = require(`./config/${env}`);
 const PORT = process.env.PORT || 8000;
 
 const app = express();
@@ -32,7 +33,7 @@ app.use(cors(corsOpts));
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect(dbConfig.url, {
+mongoose.connect(config.dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
@@ -53,6 +54,9 @@ app.post('/days', daysController.create);
 app.get('/days', daysController.findAll);
 app.delete('/days/:id', daysController.deleteById);
 app.patch('/days/:id', daysController.patch);
+
+app.post('/users', usersController.create);
+app.post('/login', usersController.login);
 
 app.listen(PORT, err => {
   if (err) {
